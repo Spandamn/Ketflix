@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Add your styles.css link here -->
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>Ketflix</h1>
+        </div>
+        <h2>Catalog</h2>
+        <button id="logout-button">Logout</button>
+        <div id="catalog" class="movie-container"></div>
+        <script src="catalog.js"></script>
+        <script>
+            // Check if the user is not logged in
+            const sessionKey = sessionStorage.getItem('sessionKey');
+            if (!sessionKey) {
+                // Redirect to login page
+                window.location.href = 'login.html';
+            }
+        </script>
+    </div>
+</body>
+</html>
