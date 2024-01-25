@@ -15,3 +15,4 @@ Once built, the application is deployed using the command `sam deploy`, which us
 The Frontend has been written in HTML and Javascript with styling in CSS; and it is hosted on Github pages. When commits are made, they are autodeployed to Github Pages.
 
 For testing purposes, you can use the username `sneedmn@sneed.com` and password `123`; or you can register a new email.
+Link to the frontend: spandamn.github.io/Ketflix
