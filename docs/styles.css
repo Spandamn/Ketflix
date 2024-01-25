@@ -1,0 +1,120 @@
+/* Basic styling */
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.container {
+    width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #1f1f1f;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    background-color: #e50914; /* Netflix red */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Netflix-inspired colors */
+/* Customize as needed */
+.container {
+    background-color: #221f1f; /* Darker gray */
+}
+
+button[type="submit"]:hover {
+    background-color: #d50813; /* Hover effect */
+} 
+
+body {
+    overflow-x: hidden; /* Hide vertical scrollbar */
+}
+
+.movie-container {
+    display: flex;
+    flex-direction: column; /* Stack genres vertically */
+    align-items: flex-start; /* Align genres to the left */
+}
+
+.genre {
+    margin-bottom: 20px; /* Adjust the spacing between genres */
+}
+
+.movies-container {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent movies from wrapping to the next line */
+    overflow-x: auto; /* Enable horizontal scrollbar for movies */
+}
+
+.movie {
+    margin-right: 20px; /* Adjust the spacing between movies */
+}
+
+.thumbnail {
+    width: 150px; /* Set a fixed width for thumbnails */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+}
+
+
+#logout-button,
+#back-to-catalog {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#logout-button {
+    background-color: #333; /* Dark background color */
+    color: #fff;
+}
+
+#back-to-catalog {
+    background-color: #e50914; /* Netflix red */
+    color: #fff;
+}
+
+#logout-button:hover,
+#back-to-catalog:hover {
+    background-color: #555; /* Darken the background on hover */
+}
