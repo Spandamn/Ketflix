@@ -1,0 +1,213 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  devops-test
+
+  Sample SAM Template for devops-test
+
+Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,GET,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: login.handler
+      Runtime: nodejs16.x
+      Timeout: 5
+      MemorySize: 256
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        LoginPost:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+      Environment:
+        Variables:
+          TableName: !Ref LoginDB
+          SessionTable: !Ref SessionDB
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - login.ts
+
+  LogoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: logout.handler
+      Runtime: nodejs16.x
+      Timeout: 5
+      MemorySize: 256
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        LogoutPost:
+          Type: Api
+          Properties:
+            Path: /logout
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+      Environment:
+        Variables:
+          TableName: !Ref SessionDB
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - logout.ts
+
+  RegisterFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: src/
+      Handler: register.handler
+      Runtime: nodejs16.x
+      Timeout: 5
+      MemorySize: 256
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        RegisterApi:
+          Type: 'Api'
+          Properties:
+            Path: /register
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+      Environment:
+        Variables:
+          TableName: !Ref LoginDB
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - register.ts
+
+  CatalogFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: src/
+      Handler: catalog.handler
+      Runtime: nodejs16.x
+      Timeout: 5
+      MemorySize: 256
+      Policies: AmazonDynamoDBFullAccess
+      Events:
+        CatalogApi:
+          Type: 'Api'
+          Properties:
+            Path: /catalog
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+      Environment:
+        Variables:
+          TableName: !Ref MovieCatalogDB
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - catalog.ts
+
+  PlayerFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      CodeUri: src/
+      Handler: player.handler
+      Runtime: nodejs16.x
+      Timeout: 5
+      MemorySize: 256
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3ReadOnlyAccess
+      Events:
+        PlayerApi:
+          Type: 'Api'
+          Properties:
+            Path: /player
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+      Environment:
+        Variables:
+          TableName: !Ref MovieCatalogDB
+          S3Bucket: ketflix
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - player.ts
+
+  LoginDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: LoginDB
+      AttributeDefinitions: 
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: email
+          KeyType: HASH
+
+  SessionDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: SessionDB
+      AttributeDefinitions: 
+        - AttributeName: sessionKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: sessionKey
+          KeyType: HASH
+
+  MovieCatalogDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: MovieCatalogDB
+      AttributeDefinitions: 
+        - AttributeName: movieid
+          AttributeType: S
+      KeySchema:
+        - AttributeName: movieid
+          KeyType: HASH
+
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value:
+      Fn::Sub: "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

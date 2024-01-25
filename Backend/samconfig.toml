@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "devops-test"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-j0sq8ccm1oif"
+s3_prefix = "devops-test"
+region = "eu-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
